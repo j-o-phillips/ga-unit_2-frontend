@@ -1,7 +1,6 @@
 <template>
   <h1>SPOTIFY PODS</h1>
   <button @click="handleLogin">Login with Spotify</button>
-  <button @click="testCookies">Search for cookie</button>
 </template>
 
 <script>

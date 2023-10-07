@@ -1,16 +1,12 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-  </div>
-  <h1>{{ userId }}</h1>
-</template>
+<template></template>
 
 <script>
+import Navbar from "@/components/Navbar.vue";
 import Cookies from "js-cookie";
 
 export default {
   name: "Dashboard",
-  components: {},
+  components: { Navbar },
   data() {
     return {
       userId: "",
