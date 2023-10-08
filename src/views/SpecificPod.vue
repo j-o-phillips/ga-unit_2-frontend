@@ -1,11 +1,13 @@
 <template>
   <div id="custom-container">
     <div class="item" id="search-container">
-      <Search />
+      <Search :handleAddToSuggestions="handleAddToSuggestions" />
     </div>
     <div class="item" id="playlist-select"></div>
     <div class="item" id="current-playlist"></div>
-    <div class="item" id="suggestion-playlist"></div>
+    <div class="item" id="suggestion-playlist">
+      <SuggestionsPlaylist :suggestionsData="suggestionsData" />
+    </div>
     <div class="item" id="player-container"></div>
     <div class="item" id="friend-container"></div>
     <div class="item" id="post-container"></div>
@@ -14,18 +16,29 @@
 
 <script>
 import Search from "@/components/Search.vue";
+import SuggestionsPlaylist from "@/components/SuggestionsPlaylist.vue";
 
 export default {
   name: "SpecificPod",
-  components: { Search },
+  components: { Search, SuggestionsPlaylist },
+  data() {
+    return {
+      suggestionsData: [],
+    };
+  },
+  methods: {
+    handleAddToSuggestions(data) {
+      this.suggestionsData.push(data);
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 #custom-container {
   height: 90vh;
   width: 100vw;
-  background-color: beige;
+
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);

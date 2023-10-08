@@ -21,7 +21,7 @@ const routes = [
     component: MyPods,
   },
   {
-    path: "/my-pods/pod",
+    path: "/my-pods/:pod",
     name: "pod",
     component: SpecificPod,
   },

@@ -1,5 +1,5 @@
 <template>
-  <div id="search-box">
+  <div class="mt-3" id="search-box">
     <label for="search">Search:</label>
     <input
       type="text"
@@ -11,7 +11,11 @@
     <button @click="handleSearch">Search</button>
   </div>
   <div id="trackcard-container">
-    <TrackCard v-for="track in searchResults" :trackData="track" />
+    <TrackCard
+      v-for="track in searchResults"
+      :trackData="track"
+      :handleAddToSuggestions="handleAddToSuggestions"
+    />
   </div>
 </template>
 
@@ -21,6 +25,7 @@ const ROOT_URL = "http://localhost:4000";
 export default {
   name: "Search",
   components: { TrackCard },
+  props: ["handleAddToSuggestions"],
   data() {
     return {
       searchItem: "",

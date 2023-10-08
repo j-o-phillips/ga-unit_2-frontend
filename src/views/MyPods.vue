@@ -1,23 +1,136 @@
 <template>
-  <h1>My Pods</h1>
   <div class="container" id="container">
     <div class="row">
-      <div class="col-3 bg-primary window"></div>
-      <div class="col-9 bg-warning window"></div>
+      <div class="col-3 bg-primary window">
+        <h3>Search All Pods</h3>
+        <div id="search-box">
+          <input
+            type="text"
+            name="search"
+            id="search"
+            v-model="searchItem"
+            class="text-left"
+          />
+          <button @click="handlePodSearch">Search</button>
+        </div>
+      </div>
+      <div class="col-9 bg-warning window">
+        <h3>My Pods</h3>
+        <div class="d-flex flex-wrap m-4" id="mypods-container">
+          <div>
+            <input
+              type="text"
+              name="podName"
+              id="podName"
+              v-model="podName"
+              class="text-left"
+              placeholder="Pod Name"
+            />
+            <button @click="handleAddPod">Create New Pod</button>
+          </div>
+          <router-link
+            class="pod-card"
+            :to="'/my-pods/' + pod.name"
+            v-for="pod in podList"
+            >{{ pod.name }}</router-link
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script></script>
+<script>
+const ROOT_URL = "http://localhost:4000";
+
+export default {
+  name: "MyPods",
+  data() {
+    return {
+      searchItem: "",
+      podName: "",
+      podList: "",
+    };
+  },
+  mounted() {
+    this.refreshPodlist();
+  },
+  methods: {
+    handlePodSearch() {
+      console.log("search");
+    },
+    handleAddPod() {
+      try {
+        const podName = {
+          podName: this.podName,
+        };
+        fetch(`${ROOT_URL}/my-pods`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(podName),
+        })
+          .then((res) => res.json())
+          .then((res) => alert(res.message))
+          .then(() => this.refreshPodlist());
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    refreshPodlist() {
+      try {
+        fetch(`${ROOT_URL}/my-pods`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => (this.podList = res));
+        console.log(this.podList);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+};
+</script>
 <style>
 #container {
   height: 80vh;
+  margin-top: 4vmin;
 }
 .row {
   height: 100%;
+  width: 100%;
 }
 .window {
   height: 100%;
   width: 100%;
+}
+.pod-card {
+  height: 18vmin;
+  width: 23vmin;
+  background-color: blueviolet;
+  margin: 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#mypods-container > :first-child {
+  height: 18vmin;
+  width: 23vmin;
+  background-color: blueviolet;
+  margin: 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 </style>
