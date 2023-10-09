@@ -3,6 +3,8 @@
     <SuggestionsCard
       v-for="track in suggestionsData"
       :trackData="track"
+      :handleAddToPlaylist="handleAddToPlaylist"
+      :handleDeleteFromSuggestions="handleDeleteFromSuggestions"
     ></SuggestionsCard>
   </div>
 </template>
@@ -12,7 +14,11 @@ import SuggestionsCard from "./SuggestionsCard.vue";
 
 export default {
   name: "SuggestionsPlaylist",
-  props: ["suggestionsData"],
+  props: [
+    "suggestionsData",
+    "handleAddToPlaylist",
+    "handleDeleteFromSuggestions",
+  ],
   components: { SuggestionsCard },
 };
 </script>

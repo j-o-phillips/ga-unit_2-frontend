@@ -3,8 +3,7 @@
     <div id="first-row">
       <p>{{ trackData.name }} || {{ trackData.artist }}</p>
 
-      <button @click="handleAddToPlaylist(trackData)">+</button>
-      <button @click="handleDeleteFromSuggestions(trackData)">X</button>
+      <button @click="handleDeleteFromPlaylist(trackData)">X</button>
     </div>
     <div>
       <p>{{ trackData.album }}</p>
@@ -14,8 +13,8 @@
 
 <script>
 export default {
-  name: "SuggestionsCard",
-  props: ["trackData", "handleAddToPlaylist", "handleDeleteFromSuggestions"],
+  name: "PlaylistCard",
+  props: ["trackData", "handleDeleteFromPlaylist"],
 };
 </script>
 
