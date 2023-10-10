@@ -4,7 +4,7 @@
       <Search :handleAddToSuggestions="handleAddToSuggestions" />
     </div>
     <div class="item" id="playlist-select">
-      {{ playlistName }}
+      <h3>{{ playlistName }}</h3>
     </div>
     <div class="item" id="current-playlist">
       <PodPlaylist
@@ -37,6 +37,8 @@ import Search from "@/components/Search.vue";
 import SuggestionsPlaylist from "@/components/SuggestionsPlaylist.vue";
 import PodPlaylist from "@/components/PodPlaylist.vue";
 import Posts from "@/components/Posts.vue";
+import Cookies from "js-cookie";
+const userCred = Cookies.get("userCred");
 
 export default {
   name: "SpecificPod",
@@ -51,112 +53,135 @@ export default {
     };
   },
   mounted() {
-    fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
-      .then((res) => res.json())
-      .then((res) => {
-        this.playlistName = res.name;
-        if (res.tracks) {
-          this.playlistData = res.tracks;
-        }
-        if (res.suggestions) {
-          this.suggestionsData = res.suggestions;
-        }
-      });
+    if (userCred) {
+      fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res[0].playlists[0].name);
+          this.playlistName = res[0].playlists[0].name;
+          if (res[0].playlists[0].tracks) {
+            this.playlistData = res[0].playlists[0].tracks;
+          }
+          if (res[0].playlists[0].suggestions) {
+            this.suggestionsData = res[0].playlists[0].suggestions;
+          }
+          if (res[0].playlists[0].spotifyId) {
+            this.playlistId = res[0].playlists[0].spotifyId;
+          }
+        });
+    }
   },
   methods: {
     async handleAddToSuggestions(data) {
-      const trackDetails = {
-        id: data.id,
-        name: data.name,
-        artist: data.artists[0].name,
-        album: data.album.name,
-        uri: data.uri,
-      };
-      this.suggestionsData.push(trackDetails);
-      await fetch(`${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(trackDetails),
-      })
-        .then((res) => res.json())
-        .then((res) => console.log(res.message));
+      if (userCred) {
+        const trackDetails = {
+          id: data.id,
+          name: data.name,
+          artist: data.artists[0].name,
+          album: data.album.name,
+          uri: data.uri,
+        };
+        this.suggestionsData.push(trackDetails);
+        await fetch(
+          `${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(trackDetails),
+          }
+        )
+          .then((res) => res.json())
+          .then((res) => console.log(res.message));
+      }
     },
 
     async handleDeleteFromSuggestions(data) {
-      const index = this.suggestionsData.findIndex((track) => {
-        return track.id === data.id;
-      });
-      this.suggestionsData.splice(index, 1);
+      if (userCred) {
+        const index = this.suggestionsData.findIndex((track) => {
+          return track.id === data.id;
+        });
+        this.suggestionsData.splice(index, 1);
 
-      await fetch(`${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((res) => console.log(res.message));
+        await fetch(
+          `${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((res) => res.json())
+          .then((res) => console.log(res.message));
+      }
     },
 
     async handleAddToPlaylist(data) {
-      this.playlistData.push(data);
+      if (userCred) {
+        this.playlistData.push(data);
 
-      await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((res) => console.log(res.message));
+        await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((res) => res.json())
+          .then((res) => console.log(res.message));
+      }
     },
 
     async handleDeleteFromPlaylist(data) {
-      const index = this.playlistData.findIndex((track) => {
-        return track.id === data.id;
-      });
-      this.playlistData.splice(index, 1);
-      await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((res) => console.log(res.message));
+      if (userCred) {
+        const index = this.playlistData.findIndex((track) => {
+          return track.id === data.id;
+        });
+        this.playlistData.splice(index, 1);
+        await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((res) => res.json())
+          .then((res) => console.log(res.message));
+      }
     },
 
     syncToSpotify() {
-      const data = {
-        playlistName: this.playlistName,
-        playlistId: this.playlistId,
-        playlistData: this.playlistData,
-      };
-      fetch(`${ROOT_URL}/my-pods/sync`, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.newId) {
-            console.log(res.newId);
-            this.playlistId = res.newId;
-          }
+      if (userCred) {
+        const data = {
+          playlistName: this.playlistName,
+          playlistId: this.playlistId,
+          playlistData: this.playlistData,
+        };
+        console.log(data);
+        fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/sync`, {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         })
-        .then(() => console.log(this.playlistId));
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.newId) {
+              console.log(res.newId);
+              this.playlistId = res.newId;
+            }
+          })
+          .then(() => console.log(this.playlistId));
+      }
     },
   },
 };
@@ -202,6 +227,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: auto;
 }
 #current-playlist > button {
   position: absolute;

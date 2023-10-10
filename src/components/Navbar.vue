@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" v-if="showNavbar">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Spotify Pods</a>
       <button
@@ -18,6 +18,11 @@
           <li class="nav-item">
             <router-link to="/home" class="nav-link active" aria-current="page"
               >Home</router-link
+            >
+          </li>
+          <li class="nav-item">
+            <router-link to="/my-playlists" class="nav-link" aria-current="page"
+              >My Playlists</router-link
             >
           </li>
           <li class="nav-item">
@@ -59,6 +64,12 @@ export default {
       this.isLoggedIn = true;
       this.userId = cookieData.userId;
     }
+  },
+  computed: {
+    showNavbar() {
+      // Check if the current route has the hideNavbar meta field set to true
+      return !this.$route.meta.hideNavbar;
+    },
   },
   methods: {
     handleLogout() {

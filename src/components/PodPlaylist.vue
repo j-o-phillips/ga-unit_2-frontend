@@ -18,7 +18,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #trackcard-container {
   display: flex;
   flex-direction: column;

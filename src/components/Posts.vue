@@ -1,5 +1,6 @@
 <template>
-  <PostContainer :allPosts="allPosts" />
+  <PostContainer :allPosts="allPosts" :refreshPosts="refreshPosts" />
+
   <div id="container">
     <textarea placeholder="Type your comment" v-model="postContent"></textarea>
     <br />
@@ -20,16 +21,20 @@ export default {
     };
   },
   mounted() {
-    fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/posts`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        console.log(res);
-        this.allPosts = res;
-      });
+    this.refreshPosts();
   },
   methods: {
+    async refreshPosts() {
+      fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/posts`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          console.log(res);
+          this.allPosts = res;
+        });
+    },
+
     async handleSubmitPost() {
       const data = {
         content: this.postContent,
@@ -43,15 +48,14 @@ export default {
         body: JSON.stringify(data),
       })
         .then((res) => res.json())
-        .then((res) => console.log(res.message));
+        .then(() => {
+          this.refreshPosts();
+        });
     },
   },
 };
 </script>
 <style scoped>
-#container {
-  justify-self: flex-end;
-}
 textarea {
   height: 100px;
   width: 300px;

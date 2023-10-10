@@ -13,6 +13,14 @@
           />
           <button @click="handlePodSearch">Search</button>
         </div>
+        <div id="search-results">
+          <router-link
+            class="pod-card"
+            :to="'/my-pods/' + pod.name"
+            v-for="pod in searchResults"
+            >{{ pod.name }}</router-link
+          >
+        </div>
       </div>
       <div class="col-9 bg-warning window">
         <h3>My Pods</h3>
@@ -25,6 +33,14 @@
               v-model="podName"
               class="text-left"
               placeholder="Pod Name"
+            />
+            <input
+              type="text"
+              name="playlistName"
+              id="playlistName"
+              v-model="playlistName"
+              class="text-left"
+              placeholder="First Playlist Name"
             />
             <button @click="handleAddPod">Create New Pod</button>
           </div>
@@ -41,6 +57,8 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+const userCred = Cookies.get("userCred");
 const ROOT_URL = "http://localhost:4000";
 
 export default {
@@ -48,7 +66,9 @@ export default {
   data() {
     return {
       searchItem: "",
+      searchResults: [],
       podName: "",
+      playlistName: "",
       podList: "",
     };
   },
@@ -57,48 +77,58 @@ export default {
   },
   methods: {
     handlePodSearch() {
-      console.log("search");
+      if (userCred) {
+        console.log("search");
+        fetch(`${ROOT_URL}/my-pods/${this.searchItem}`)
+          .then((res) => res.json())
+          .then((res) => (this.searchResults = res));
+      }
     },
     handleAddPod() {
-      try {
-        const podName = {
-          podName: this.podName,
-        };
-        fetch(`${ROOT_URL}/my-pods`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(podName),
-        })
-          .then((res) => res.json())
-          .then((res) => alert(res.message))
-          .then(() => this.refreshPodlist());
-      } catch (error) {
-        console.log(error);
+      if (userCred) {
+        try {
+          const podData = {
+            podName: this.podName,
+            playlistName: this.playlistName,
+          };
+          fetch(`${ROOT_URL}/my-pods`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(podData),
+          })
+            .then((res) => res.json())
+            .then((res) => alert(res.message))
+            .then(() => this.refreshPodlist());
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
     refreshPodlist() {
-      try {
-        fetch(`${ROOT_URL}/my-pods`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => (this.podList = res));
-        console.log(this.podList);
-      } catch (error) {
-        console.log(error);
+      if (userCred) {
+        try {
+          fetch(`${ROOT_URL}/my-pods`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((res) => res.json())
+            .then((res) => (this.podList = res));
+          console.log(this.podList);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   },
 };
 </script>
-<style>
+<style scoped>
 #container {
   height: 80vh;
   margin-top: 4vmin;
@@ -109,7 +139,11 @@ export default {
 }
 .window {
   height: 100%;
-  width: 100%;
+}
+#search-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .pod-card {
   height: 18vmin;

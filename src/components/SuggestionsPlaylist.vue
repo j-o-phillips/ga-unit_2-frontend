@@ -1,4 +1,5 @@
 <template>
+  <h4>Suggested Tracks</h4>
   <div id="trackcard-container">
     <SuggestionsCard
       v-for="track in suggestionsData"
@@ -23,7 +24,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #trackcard-container {
   display: flex;
   flex-direction: column;
