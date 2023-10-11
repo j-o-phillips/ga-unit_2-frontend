@@ -4,7 +4,6 @@
 </template>
 <script>
 import Navbar from "@/components/Navbar.vue";
-import Cookies from "js-cookie";
 
 export default {
   name: "App",

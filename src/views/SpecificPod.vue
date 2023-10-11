@@ -5,12 +5,27 @@
     </div>
     <div class="item" id="playlist-select">
       <h3>{{ playlistName }}</h3>
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Menu
+        </button>
+        <ul class="dropdown-menu">
+          <li><button @click="handleLeavePod">Leave pod</button></li>
+          <li><button @click="handleDeletePod">Delete pod</button></li>
+        </ul>
+      </div>
     </div>
     <div class="item" id="current-playlist">
       <PodPlaylist
         v-if="playlistData"
         :playlistData="playlistData"
         :handleDeleteFromPlaylist="handleDeleteFromPlaylist"
+        :podAdmins="podAdmins"
       />
       <button @click="syncToSpotify">Sync to Spotify</button>
     </div>
@@ -20,10 +35,13 @@
         :suggestionsData="suggestionsData"
         :handleAddToPlaylist="handleAddToPlaylist"
         :handleDeleteFromSuggestions="handleDeleteFromSuggestions"
+        :podAdmins="podAdmins"
       />
     </div>
-    <div class="item" id="player-container"></div>
-    <div class="item" id="friend-container"></div>
+
+    <div class="item" id="friend-container">
+      <div class="friend-card" v-for="friend in podMembers">{{ friend }}</div>
+    </div>
     <div class="item" id="post-container">
       <Posts />
     </div>
@@ -50,6 +68,10 @@ export default {
       suggestionsData: [],
       playlistData: [],
       test: [],
+      podMembers: [],
+      podAdmins: [],
+      podUsers: [],
+      currentPodId: "",
     };
   },
   mounted() {
@@ -57,13 +79,18 @@ export default {
       fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res[0].playlists[0].name);
+          this.podAdmins = res[0].admins;
+          this.podUsers = res[0].users;
+          this.podMembers = [res[0].admins + res[0].users];
+          console.log(this.podMembers);
+          this.currentPodId = res[0]._id;
           this.playlistName = res[0].playlists[0].name;
           if (res[0].playlists[0].tracks) {
             this.playlistData = res[0].playlists[0].tracks;
           }
           if (res[0].playlists[0].suggestions) {
             this.suggestionsData = res[0].playlists[0].suggestions;
+            console.log(this.suggestionsData);
           }
           if (res[0].playlists[0].spotifyId) {
             this.playlistId = res[0].playlists[0].spotifyId;
@@ -164,7 +191,7 @@ export default {
           playlistId: this.playlistId,
           playlistData: this.playlistData,
         };
-        console.log(data);
+
         fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/sync`, {
           method: "PUT",
           credentials: "include",
@@ -183,6 +210,22 @@ export default {
           .then(() => console.log(this.playlistId));
       }
     },
+
+    handleLeavePod() {
+      console.log("leave");
+      fetch(`${ROOT_URL}/leave/${this.currentPodId}`, {
+        method: "DELETE",
+        credentials: "include",
+        body: JSON.stringify({ podId: this.currentPodId }),
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res.message))
+        .then(() => this.$router.push("/my-pods"));
+    },
+
+    handleDeletePod() {
+      console.log("delete");
+    },
   },
 };
 </script>
@@ -195,10 +238,12 @@ export default {
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 50px 1fr 2fr 3fr 75px;
+  grid-template-rows: 50px 1fr 2fr 3fr;
+  gap: 5px;
 }
 .item {
   border: 1px solid black;
+  border-radius: 10px;
 }
 #search-container {
   grid-row: 1/6;
@@ -206,6 +251,10 @@ export default {
 }
 #playlist-select {
   grid-row: 1/2;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 #current-playlist {
   grid-row: 2/4;
@@ -213,14 +262,14 @@ export default {
   position: relative;
 }
 #suggestion-playlist {
-  grid-row: 4/5;
+  grid-row: 4/6;
   overflow: auto;
 }
-#player-container {
-  grid-row: 5/6;
-}
+
 #friend-container {
   grid-row: 1/3;
+  display: flex;
+  flex-wrap: wrap;
 }
 #post-container {
   grid-row: 3/6;
@@ -232,5 +281,22 @@ export default {
 #current-playlist > button {
   position: absolute;
   bottom: 3px;
+}
+.friend-card {
+  border: 1px solid black;
+  height: 6vmin;
+  width: 10vmin;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+}
+.dropdown {
+  position: absolute;
+  right: 5px;
+}
+li > button {
+  border: none;
+  background-color: transparent;
 }
 </style>

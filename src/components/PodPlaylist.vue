@@ -4,6 +4,7 @@
       v-for="track in playlistData"
       :trackData="track"
       :handleDeleteFromPlaylist="handleDeleteFromPlaylist"
+      :podAdmins="podAdmins"
     ></PlaylistCard>
   </div>
 </template>
@@ -13,7 +14,7 @@ import PlaylistCard from "./PlaylistCard.vue";
 
 export default {
   name: "PodPlaylist",
-  props: ["playlistData", "handleDeleteFromPlaylist"],
+  props: ["playlistData", "handleDeleteFromPlaylist", "podAdmins"],
   components: { PlaylistCard },
 };
 </script>

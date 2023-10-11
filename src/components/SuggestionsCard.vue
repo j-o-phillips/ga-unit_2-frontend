@@ -1,10 +1,21 @@
 <template>
   <div id="track-container">
     <div id="first-row">
-      <p>{{ trackData.name }} || {{ trackData.artist }}</p>
-
-      <button @click="handleAddToPlaylist(trackData)">+</button>
-      <button @click="handleDeleteFromSuggestions(trackData)">X</button>
+      <p>
+        {{ truncateString(trackData.name) }} ||
+        {{ truncateString(trackData.artist) }}
+      </p>
+      <ul class="list-group list-group-horizontal">
+        <button v-if="isAdmin()" @click="handleAddToPlaylist(trackData)">
+          +
+        </button>
+        <button
+          v-if="isAdmin()"
+          @click="handleDeleteFromSuggestions(trackData)"
+        >
+          X
+        </button>
+      </ul>
     </div>
     <div>
       <p>{{ trackData.album }}</p>
@@ -13,9 +24,33 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+let userId;
+const userCred = Cookies.get("userCred");
+if (userCred) {
+  const cookieData = JSON.parse(userCred);
+  userId = cookieData.userId;
+}
+
 export default {
   name: "SuggestionsCard",
-  props: ["trackData", "handleAddToPlaylist", "handleDeleteFromSuggestions"],
+  props: [
+    "trackData",
+    "handleAddToPlaylist",
+    "handleDeleteFromSuggestions",
+    "podAdmins",
+  ],
+  methods: {
+    isAdmin() {
+      return !!this.podAdmins.find((user) => userId === user);
+    },
+    truncateString(str) {
+      if (str.length > 15) {
+        return str.slice(0, 15) + "...";
+      }
+      return str;
+    },
+  },
 };
 </script>
 
@@ -47,6 +82,11 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 5px;
+  top: 10px;
+  position: relative;
+}
+#likes {
   margin-right: 5px;
   top: 10px;
   position: relative;

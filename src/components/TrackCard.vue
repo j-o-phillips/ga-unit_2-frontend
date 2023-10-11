@@ -1,7 +1,10 @@
 <template>
   <div id="track-container">
     <div id="first-row">
-      <p>{{ trackData.name }} || {{ trackData.artists[0].name }}</p>
+      <p>
+        {{ truncateString(trackData.name) }} ||
+        {{ truncateString(trackData.artists[0].name) }}
+      </p>
 
       <button @click="handleAddToSuggestions(trackData)">+</button>
     </div>
@@ -15,6 +18,14 @@
 export default {
   name: "TrackCard",
   props: ["trackData", "handleAddToSuggestions"],
+  methods: {
+    truncateString(str) {
+      if (str.length > 15) {
+        return str.slice(0, 15) + "...";
+      }
+      return str;
+    },
+  },
 };
 </script>
 
@@ -30,6 +41,7 @@ p {
   margin-bottom: 4px;
   width: 90%;
   overflow: hidden;
+  flex-wrap: nowrap;
 }
 #track-container > div:first-child {
   display: flex;

@@ -1,9 +1,14 @@
 <template>
   <div id="track-container">
     <div id="first-row">
-      <p>{{ trackData.name }} || {{ trackData.artist }}</p>
+      <p>
+        {{ truncateString(trackData.name) }} ||
+        {{ truncateString(trackData.artist) }}
+      </p>
 
-      <button @click="handleDeleteFromPlaylist(trackData)">X</button>
+      <button v-if="isAdmin()" @click="handleDeleteFromPlaylist(trackData)">
+        X
+      </button>
     </div>
     <div>
       <p>{{ trackData.album }}</p>
@@ -12,9 +17,27 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+let userId;
+const userCred = Cookies.get("userCred");
+if (userCred) {
+  const cookieData = JSON.parse(userCred);
+  userId = cookieData.userId;
+}
 export default {
   name: "PlaylistCard",
-  props: ["trackData", "handleDeleteFromPlaylist"],
+  props: ["trackData", "handleDeleteFromPlaylist", "podAdmins"],
+  methods: {
+    isAdmin() {
+      return !!this.podAdmins.find((user) => userId === user);
+    },
+    truncateString(str) {
+      if (str.length > 15) {
+        return str.slice(0, 15) + "...";
+      }
+      return str;
+    },
+  },
 };
 </script>
 

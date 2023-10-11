@@ -30,7 +30,6 @@ export default {
           return res.json();
         })
         .then((res) => {
-          console.log(res);
           this.allPosts = res;
         });
     },

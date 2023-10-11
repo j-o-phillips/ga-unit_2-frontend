@@ -6,6 +6,7 @@
       :trackData="track"
       :handleAddToPlaylist="handleAddToPlaylist"
       :handleDeleteFromSuggestions="handleDeleteFromSuggestions"
+      :podAdmins="podAdmins"
     ></SuggestionsCard>
   </div>
 </template>
@@ -19,6 +20,7 @@ export default {
     "suggestionsData",
     "handleAddToPlaylist",
     "handleDeleteFromSuggestions",
+    "podAdmins",
   ],
   components: { SuggestionsCard },
 };

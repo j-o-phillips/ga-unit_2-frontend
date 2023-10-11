@@ -11,6 +11,9 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Cookies from "js-cookie";
+const ROOT_URL = "http://localhost:4000";
+const redirectUri = "http://localhost:8080/home";
+const clientId = "2420c054672e481b9ecd1cee4a3ff324";
 
 export default {
   name: "Dashboard",
@@ -18,13 +21,83 @@ export default {
   data() {
     return {
       userId: "",
+      mountHasRun: false,
     };
   },
   mounted() {
     const userCred = Cookies.get("userCred");
-    const cookieData = JSON.parse(userCred);
 
-    this.userId = cookieData.userId;
+    console.log(userCred);
+    if (!userCred) {
+      const urlParams = new URLSearchParams(window.location.search);
+      let code = urlParams.get("code");
+
+      let codeVerifier = localStorage.getItem("code_verifier");
+
+      let body = new URLSearchParams({
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: redirectUri,
+        client_id: clientId,
+        code_verifier: codeVerifier,
+      });
+
+      const response = fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP status " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("set");
+          localStorage.setItem("access_token", data.access_token);
+          this.getProfile();
+          this.mountHasRun = true;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  },
+  methods: {
+    async getProfile() {
+      let accessToken = localStorage.getItem("access_token");
+      console.log(accessToken);
+      const response = await fetch("https://api.spotify.com/v1/me", {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+
+      const data = await response.json();
+      const cookieData = JSON.stringify({
+        displayName: data.display_name,
+        email: data.email,
+        userId: data.id,
+        images: data.images,
+        accessToken: accessToken,
+      });
+      Cookies.set("userCred", cookieData);
+      this.updateUserDB(data.id);
+    },
+    async updateUserDB(userId) {
+      console.log(userId);
+
+      fetch(`${ROOT_URL}/login`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          userId: userId,
+        }),
+      });
+    },
   },
 };
 </script>
@@ -38,9 +111,26 @@ export default {
   height: 70%;
   width: 70%;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 75px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(
+      217deg,
+      rgba(162, 255, 0, 0.625),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(179, 7, 242, 0.851), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
+  color: antiquewhite;
+}
+.window:hover {
+  background: linear-gradient(
+      217deg,
+      rgba(162, 255, 0, 0.752),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgb(179, 7, 242), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
 }
 </style>

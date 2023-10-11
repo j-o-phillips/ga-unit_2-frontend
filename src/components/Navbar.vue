@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary" v-if="showNavbar">
+  <nav class="navbar navbar-expand-lg" data-bs-theme="dark" v-if="showNavbar">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Spotify Pods</a>
       <button
@@ -47,7 +47,7 @@
 
 <script>
 import Cookies from "js-cookie";
-
+const ROOT_URL = "http://localhost:4000";
 export default {
   name: "Navbar",
   components: {},
@@ -55,14 +55,16 @@ export default {
     return {
       isLoggedIn: false,
       userId: "",
+      userData: "",
     };
   },
   mounted() {
     const userCred = Cookies.get("userCred");
-    if (userCred) {
+    const accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
       const cookieData = JSON.parse(userCred);
       this.isLoggedIn = true;
-      this.userId = cookieData.userId;
+      this.userId = cookieData.displayName;
     }
   },
   computed: {
@@ -74,10 +76,23 @@ export default {
   methods: {
     handleLogout() {
       Cookies.remove("userCred");
+      localStorage.removeItem("code_verifier");
+      localStorage.removeItem("access_token");
+
       this.userId = "";
       this.isLoggedIn = false;
-      window.location = "http://localhost:4000/logout";
+      // window.location = "http://localhost:4000/logout";
+      // fetch(`${ROOT_URL}/logout`, {
+      //   method: "POST",
+      // });
+      this.$router.push("/");
     },
   },
 };
 </script>
+<style scoped>
+nav {
+  background-color: rgb(48, 48, 48);
+  color: antiquewhite;
+}
+</style>

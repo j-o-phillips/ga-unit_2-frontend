@@ -96,20 +96,20 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 2fr;
+  gap: 5px;
 }
 #playlists {
-  border: 1px solid black;
   grid-column: 1/4;
   overflow: auto;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 #search {
-  border: 1px solid black;
   grid-row: 2/3;
 }
 #content {
-  border: 1px solid black;
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -120,5 +120,9 @@ export default {
   width: 100px;
   margin: 2px;
   overflow: hidden;
+}
+#custom-container > div {
+  background-color: rgb(57, 56, 56);
+  border-radius: 20px;
 }
 </style>

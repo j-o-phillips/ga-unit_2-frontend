@@ -14,12 +14,19 @@
           <button @click="handlePodSearch">Search</button>
         </div>
         <div id="search-results">
-          <router-link
+          <div
             class="pod-card"
             :to="'/my-pods/' + pod.name"
             v-for="pod in searchResults"
-            >{{ pod.name }}</router-link
           >
+            <div>{{ pod.name }}</div>
+            <button
+              v-if="!isPodInMyPods(pod.name)"
+              @click="handleJoinPod(pod._id)"
+            >
+              Join
+            </button>
+          </div>
         </div>
       </div>
       <div class="col-9 bg-warning window">
@@ -124,6 +131,23 @@ export default {
           console.log(error);
         }
       }
+    },
+    handleJoinPod(id) {
+      console.log(id);
+      fetch(`${ROOT_URL}/join/${id}`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({ podId: id }),
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res.message))
+        .then(() => {
+          this.$router.push("my-pods");
+          this.$router.go();
+        });
+    },
+    isPodInMyPods(name) {
+      return !!this.podList.find((pod) => pod.name === name);
     },
   },
 };
