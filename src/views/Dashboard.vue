@@ -11,23 +11,23 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Cookies from "js-cookie";
+
 const ROOT_URL = "http://localhost:4000";
 const redirectUri = "http://localhost:8080/home";
-const clientId = "2420c054672e481b9ecd1cee4a3ff324";
+const clientId = process.env.VUE_APP_CLIENT_ID;
+const clientSecret = process.env.VUE_APP_CLIENT_SECRET;
 
 export default {
   name: "Dashboard",
   components: { Navbar },
+  props: ["refreshNavbar"],
   data() {
     return {
       userId: "",
-      mountHasRun: false,
     };
   },
   mounted() {
     const userCred = Cookies.get("userCred");
-
-    console.log(userCred);
     if (!userCred) {
       const urlParams = new URLSearchParams(window.location.search);
       let code = urlParams.get("code");
@@ -59,7 +59,11 @@ export default {
           console.log("set");
           localStorage.setItem("access_token", data.access_token);
           this.getProfile();
-          this.mountHasRun = true;
+        })
+        .then(() => {
+          setTimeout(() => {
+            this.refreshNavbar();
+          }, 1000);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -122,7 +126,7 @@ export default {
     ),
     linear-gradient(127deg, rgba(179, 7, 242, 0.851), rgba(0, 255, 0, 0) 70.71%),
     linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
-  color: antiquewhite;
+  color: white;
 }
 .window:hover {
   background: linear-gradient(

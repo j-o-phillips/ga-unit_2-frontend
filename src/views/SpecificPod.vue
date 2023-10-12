@@ -1,7 +1,10 @@
 <template>
   <div id="custom-container">
     <div class="item" id="search-container">
-      <Search :handleAddToSuggestions="handleAddToSuggestions" />
+      <Search
+        :handleAddToSuggestions="handleAddToSuggestions"
+        :disableButtons="disableButtons"
+      />
     </div>
     <div class="item" id="playlist-select">
       <h3>{{ playlistName }}</h3>
@@ -26,6 +29,7 @@
         :playlistData="playlistData"
         :handleDeleteFromPlaylist="handleDeleteFromPlaylist"
         :podAdmins="podAdmins"
+        :disableButtons="disableButtons"
       />
       <button @click="syncToSpotify">Sync to Spotify</button>
     </div>
@@ -36,6 +40,7 @@
         :handleAddToPlaylist="handleAddToPlaylist"
         :handleDeleteFromSuggestions="handleDeleteFromSuggestions"
         :podAdmins="podAdmins"
+        :disableButtons="disableButtons"
       />
     </div>
 
@@ -43,7 +48,7 @@
       <div class="friend-card" v-for="friend in podMembers">{{ friend }}</div>
     </div>
     <div class="item" id="post-container">
-      <Posts />
+      <Posts :key="postsKey" :updatePosts="updatePosts" />
     </div>
   </div>
 </template>
@@ -57,6 +62,7 @@ import PodPlaylist from "@/components/PodPlaylist.vue";
 import Posts from "@/components/Posts.vue";
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
+//json image first
 
 export default {
   name: "SpecificPod",
@@ -72,6 +78,8 @@ export default {
       podAdmins: [],
       podUsers: [],
       currentPodId: "",
+      disableButtons: false,
+      postsKey: 0,
     };
   },
   mounted() {
@@ -81,8 +89,8 @@ export default {
         .then((res) => {
           this.podAdmins = res[0].admins;
           this.podUsers = res[0].users;
-          this.podMembers = [res[0].admins + res[0].users];
-          console.log(this.podMembers);
+          this.podMembers = res[0].admins.concat(res[0].users);
+
           this.currentPodId = res[0]._id;
           this.playlistName = res[0].playlists[0].name;
           if (res[0].playlists[0].tracks) {
@@ -101,6 +109,7 @@ export default {
   methods: {
     async handleAddToSuggestions(data) {
       if (userCred) {
+        this.disableButtons = true;
         const trackDetails = {
           id: data.id,
           name: data.name,
@@ -121,12 +130,16 @@ export default {
           }
         )
           .then((res) => res.json())
-          .then((res) => console.log(res.message));
+          .then((res) => {
+            console.log(res.message);
+            this.disableButtons = false;
+          });
       }
     },
 
     async handleDeleteFromSuggestions(data) {
       if (userCred) {
+        this.disableButtons = true;
         const index = this.suggestionsData.findIndex((track) => {
           return track.id === data.id;
         });
@@ -144,12 +157,16 @@ export default {
           }
         )
           .then((res) => res.json())
-          .then((res) => console.log(res.message));
+          .then((res) => {
+            console.log(res.message);
+            this.disableButtons = false;
+          });
       }
     },
 
     async handleAddToPlaylist(data) {
       if (userCred) {
+        this.disableButtons = true;
         this.playlistData.push(data);
 
         await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
@@ -161,12 +178,16 @@ export default {
           body: JSON.stringify(data),
         })
           .then((res) => res.json())
-          .then((res) => console.log(res.message));
+          .then((res) => {
+            console.log(res.message);
+            this.disableButtons = false;
+          });
       }
     },
 
     async handleDeleteFromPlaylist(data) {
       if (userCred) {
+        this.disableButtons = true;
         const index = this.playlistData.findIndex((track) => {
           return track.id === data.id;
         });
@@ -180,7 +201,10 @@ export default {
           body: JSON.stringify(data),
         })
           .then((res) => res.json())
-          .then((res) => console.log(res.message));
+          .then((res) => {
+            console.log(res.message);
+            this.disableButtons = false;
+          });
       }
     },
 
@@ -212,7 +236,6 @@ export default {
     },
 
     handleLeavePod() {
-      console.log("leave");
       fetch(`${ROOT_URL}/leave/${this.currentPodId}`, {
         method: "DELETE",
         credentials: "include",
@@ -226,6 +249,10 @@ export default {
     handleDeletePod() {
       console.log("delete");
     },
+    updatePosts() {
+      console.log("update posts");
+      this.postsKey += 1;
+    },
   },
 };
 </script>
@@ -234,16 +261,16 @@ export default {
 #custom-container {
   height: 90vh;
   width: 100vw;
-
+  color: white;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 50px 1fr 2fr 3fr;
-  gap: 5px;
+  gap: 7px;
 }
 .item {
-  border: 1px solid black;
   border-radius: 10px;
+  background-color: rgb(57, 56, 56);
 }
 #search-container {
   grid-row: 1/6;
@@ -269,7 +296,6 @@ export default {
 #friend-container {
   grid-row: 1/3;
   display: flex;
-  flex-wrap: wrap;
 }
 #post-container {
   grid-row: 3/6;
@@ -280,10 +306,13 @@ export default {
 }
 #current-playlist > button {
   position: absolute;
-  bottom: 3px;
+  bottom: 6px;
+  left: 30%;
+  right: 30%;
 }
 .friend-card {
-  border: 1px solid black;
+  background-color: rgba(28, 28, 28, 0.624);
+  border-radius: 10px;
   height: 6vmin;
   width: 10vmin;
   display: inline-flex;
@@ -295,8 +324,12 @@ export default {
   position: absolute;
   right: 5px;
 }
+ul {
+  background-color: rgb(57, 56, 56);
+}
 li > button {
   border: none;
-  background-color: transparent;
+  color: antiquewhite;
+  background: transparent;
 }
 </style>

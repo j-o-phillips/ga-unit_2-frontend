@@ -14,7 +14,7 @@ import Cookies from "js-cookie";
 const ROOT_URL = "http://localhost:4000";
 export default {
   name: "PostContainer",
-  props: ["allPosts", "refreshPosts"],
+  props: ["allPosts", "updatePosts"],
   data() {
     return {
       userId: "",
@@ -30,7 +30,7 @@ export default {
       const id = post._id;
       fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/${id}`, {
         method: "DELETE",
-      }).then(() => refreshPosts());
+      }).then(() => this.updatePosts());
     },
   },
 };
@@ -38,7 +38,7 @@ export default {
 
 <style scoped>
 #post-container {
-  border: 1px solid black;
+  background-color: rgba(28, 28, 28, 0.624);
   border-radius: 10px;
   margin: 5px;
   width: 80%;

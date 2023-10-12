@@ -12,7 +12,7 @@ button {
     ),
     linear-gradient(127deg, rgba(179, 7, 242, 0.851), rgba(0, 255, 0, 0) 70.71%),
     linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
-  color: antiquewhite;
+  color: white;
 }
 button:hover {
   background: linear-gradient(

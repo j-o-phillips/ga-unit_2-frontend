@@ -7,6 +7,7 @@
       :handleAddToPlaylist="handleAddToPlaylist"
       :handleDeleteFromSuggestions="handleDeleteFromSuggestions"
       :podAdmins="podAdmins"
+      :disableButtons="disableButtons"
     ></SuggestionsCard>
   </div>
 </template>
@@ -21,6 +22,7 @@ export default {
     "handleAddToPlaylist",
     "handleDeleteFromSuggestions",
     "podAdmins",
+    "disableButtons",
   ],
   components: { SuggestionsCard },
 };

@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg" data-bs-theme="dark" v-if="showNavbar">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Spotify Pods</a>
+      <a class="navbar-brand" href="#" id="logo"> Pods</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -31,10 +31,12 @@
             >
           </li>
         </ul>
+        <img :src="userImage.url" alt="" />
         <p class="mb-2 mb-lg-0 me-4">{{ userId }}</p>
         <button
+          id="logout"
           v-if="isLoggedIn"
-          class="btn btn-outline-success"
+          class="btn"
           type="submit"
           @click="handleLogout"
         >
@@ -56,6 +58,7 @@ export default {
       isLoggedIn: false,
       userId: "",
       userData: "",
+      userImage: "",
     };
   },
   mounted() {
@@ -65,6 +68,7 @@ export default {
       const cookieData = JSON.parse(userCred);
       this.isLoggedIn = true;
       this.userId = cookieData.displayName;
+      this.userImage = cookieData.images[0];
     }
   },
   computed: {
@@ -81,10 +85,6 @@ export default {
 
       this.userId = "";
       this.isLoggedIn = false;
-      // window.location = "http://localhost:4000/logout";
-      // fetch(`${ROOT_URL}/logout`, {
-      //   method: "POST",
-      // });
       this.$router.push("/");
     },
   },
@@ -94,5 +94,18 @@ export default {
 nav {
   background-color: rgb(48, 48, 48);
   color: antiquewhite;
+}
+#logo {
+  font-family: Bagel Fat One;
+  font-size: 1.5em;
+  margin-bottom: 7px;
+}
+#logout {
+  border: none;
+  border-radius: 10px;
+}
+img {
+  margin-right: 10px;
+  border-radius: 40%;
 }
 </style>

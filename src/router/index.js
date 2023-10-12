@@ -16,6 +16,7 @@ const routes = [
     path: "/home",
     name: "dashboard",
     component: Dashboard,
+    props: { refreshNavbar: "refreshNavbar" },
   },
   {
     path: "/my-playlists",
@@ -26,6 +27,7 @@ const routes = [
     path: "/my-pods",
     name: "myPods",
     component: MyPods,
+    props: { updateView: "updateView" },
   },
   {
     path: "/my-pods/:pod",

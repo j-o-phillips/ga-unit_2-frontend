@@ -1,8 +1,9 @@
 <template>
   <div id="landing-container">
-    <h1>PODS</h1>
+    <h1 id="title">PODS</h1>
     <div id="wave-container"></div>
   </div>
+
   <button id="login-btn" @click="handleLogin">Login</button>
 </template>
 
@@ -62,7 +63,7 @@ export default {
       this.generateCodeChallenge(codeVerifier).then((codeChallenge) => {
         let state = this.generateRandomString(16);
         let scope =
-          "user-read-private user-read-email playlist-read-private playlist-read-collaborative  playlist-modify-private";
+          "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public";
 
         localStorage.setItem("code_verifier", codeVerifier);
 
@@ -89,7 +90,14 @@ export default {
   justify-content: center;
   align-items: center;
   height: 90vh;
-  color: antiquewhite;
+  color: white;
+}
+#title {
+  color: rgb(100, 100, 100);
+  font-family: Bagel Fat One;
+  font-size: 5em;
+  margin-bottom: 10vmin;
+  position: absolute;
 }
 #wave-container {
   height: 14px;
@@ -130,5 +138,21 @@ export default {
   height: 40px;
   width: 180px;
   border-radius: 20px;
+  background: linear-gradient(
+      217deg,
+      rgba(162, 255, 0, 0.841),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgb(242, 7, 222), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+#login-btn:hover {
+  background: linear-gradient(
+      217deg,
+      rgba(162, 255, 0, 0.963),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgb(255, 88, 241), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
 }
 </style>

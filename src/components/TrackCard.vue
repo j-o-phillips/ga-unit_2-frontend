@@ -6,7 +6,12 @@
         {{ truncateString(trackData.artists[0].name) }}
       </p>
 
-      <button @click="handleAddToSuggestions(trackData)">+</button>
+      <button
+        :disabled="disableButtons"
+        @click="handleAddToSuggestions(trackData)"
+      >
+        +
+      </button>
     </div>
     <div>
       <p>{{ trackData.album.name }}</p>
@@ -17,7 +22,7 @@
 <script>
 export default {
   name: "TrackCard",
-  props: ["trackData", "handleAddToSuggestions"],
+  props: ["trackData", "handleAddToSuggestions", "disableButtons"],
   methods: {
     truncateString(str) {
       if (str.length > 15) {
@@ -36,9 +41,10 @@ p {
 #track-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  background-color: rgba(28, 28, 28, 0.624);
+
   border-radius: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   width: 90%;
   overflow: hidden;
   flex-wrap: nowrap;

@@ -6,10 +6,15 @@
         {{ truncateString(trackData.artist) }}
       </p>
       <ul class="list-group list-group-horizontal">
-        <button v-if="isAdmin()" @click="handleAddToPlaylist(trackData)">
+        <button
+          :disabled="disableButtons"
+          v-if="isAdmin()"
+          @click="handleAddToPlaylist(trackData)"
+        >
           +
         </button>
         <button
+          :disabled="disableButtons"
           v-if="isAdmin()"
           @click="handleDeleteFromSuggestions(trackData)"
         >
@@ -39,6 +44,7 @@ export default {
     "handleAddToPlaylist",
     "handleDeleteFromSuggestions",
     "podAdmins",
+    "disableButtons",
   ],
   methods: {
     isAdmin() {
@@ -61,9 +67,9 @@ p {
 #track-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  background-color: rgba(28, 28, 28, 0.624);
   border-radius: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   width: 90%;
   overflow: hidden;
 }

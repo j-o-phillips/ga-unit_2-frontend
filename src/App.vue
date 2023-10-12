@@ -1,13 +1,34 @@
 <template>
-  <Navbar />
-  <router-view />
+  <Navbar :key="compKey" />
+  <router-view
+    :refreshNavbar="refreshNavbar"
+    :key="updateKey"
+    :updateView="updateView"
+  />
 </template>
 <script>
 import Navbar from "@/components/Navbar.vue";
+import { ref } from "vue";
 
 export default {
   name: "App",
   components: { Navbar },
+  data() {
+    return {
+      compKey: 0,
+      updateKey: 0,
+    };
+  },
+  methods: {
+    refreshNavbar() {
+      console.log("refresh nav");
+      this.compKey += 1;
+    },
+    updateView() {
+      console.log("refresh view");
+      this.updateKey += 1;
+    },
+  },
 };
 </script>
 <style>

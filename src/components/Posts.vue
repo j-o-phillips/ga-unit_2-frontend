@@ -1,10 +1,10 @@
 <template>
-  <PostContainer :allPosts="allPosts" :refreshPosts="refreshPosts" />
+  <PostContainer :allPosts="allPosts" :updatePosts="updatePosts" />
 
-  <div id="container">
+  <div id="posts-container">
     <textarea placeholder="Type your comment" v-model="postContent"></textarea>
     <br />
-    <button @click="handleSubmitPost">Send</button>
+    <button @click="handleSubmitPost">Post</button>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ const ROOT_URL = "http://localhost:4000";
 export default {
   name: "PostBar",
   components: { PostContainer },
+  props: ["updatePosts"],
   data() {
     return {
       postContent: "",
@@ -21,19 +22,15 @@ export default {
     };
   },
   mounted() {
-    this.refreshPosts();
+    fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/posts`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        this.allPosts = res;
+      });
   },
   methods: {
-    async refreshPosts() {
-      fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/posts`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((res) => {
-          this.allPosts = res;
-        });
-    },
-
     async handleSubmitPost() {
       const data = {
         content: this.postContent,
@@ -48,7 +45,7 @@ export default {
       })
         .then((res) => res.json())
         .then(() => {
-          this.refreshPosts();
+          this.updatePosts();
         });
     },
   },
@@ -58,5 +55,11 @@ export default {
 textarea {
   height: 100px;
   width: 300px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+#posts-container {
+  position: absolute;
+  bottom: 5%;
 }
 </style>

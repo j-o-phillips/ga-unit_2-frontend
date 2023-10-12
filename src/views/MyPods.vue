@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="container">
     <div class="row">
-      <div class="col-3 bg-primary window">
+      <div class="col-3 window">
         <h3>Search All Pods</h3>
         <div id="search-box">
           <input
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="col-9 bg-warning window">
+      <div class="col-9 window">
         <h3>My Pods</h3>
         <div class="d-flex flex-wrap m-4" id="mypods-container">
           <div>
@@ -70,6 +70,7 @@ const ROOT_URL = "http://localhost:4000";
 
 export default {
   name: "MyPods",
+  props: ["updateView"],
   data() {
     return {
       searchItem: "",
@@ -80,7 +81,21 @@ export default {
     };
   },
   mounted() {
-    this.refreshPodlist();
+    if (userCred) {
+      try {
+        fetch(`${ROOT_URL}/my-pods`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => (this.podList = res));
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   methods: {
     handlePodSearch() {
@@ -107,26 +122,7 @@ export default {
             body: JSON.stringify(podData),
           })
             .then((res) => res.json())
-            .then((res) => alert(res.message))
-            .then(() => this.refreshPodlist());
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    },
-    refreshPodlist() {
-      if (userCred) {
-        try {
-          fetch(`${ROOT_URL}/my-pods`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((res) => res.json())
-            .then((res) => (this.podList = res));
-          console.log(this.podList);
+            .then(() => this.updateView());
         } catch (error) {
           console.log(error);
         }
@@ -140,10 +136,8 @@ export default {
         body: JSON.stringify({ podId: id }),
       })
         .then((res) => res.json())
-        .then((res) => console.log(res.message))
         .then(() => {
-          this.$router.push("my-pods");
-          this.$router.go();
+          this.updateView();
         });
     },
     isPodInMyPods(name) {
@@ -159,20 +153,25 @@ export default {
 }
 .row {
   height: 100%;
-  width: 100%;
 }
 .window {
   height: 100%;
+  background-color: rgb(65, 65, 65);
+  border-radius: 20px;
 }
 #search-results {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px;
 }
 .pod-card {
   height: 18vmin;
   width: 23vmin;
-  background-color: blueviolet;
+  background-color: rgba(28, 28, 28, 0.612);
+  color: white;
+  text-decoration: none;
+  font-size: 1.5em;
   margin: 5px;
   border-radius: 10px;
   display: flex;
@@ -180,15 +179,34 @@ export default {
   justify-content: center;
   align-items: center;
 }
+.pod-card:hover {
+  background: linear-gradient(
+      217deg,
+      rgba(162, 255, 0, 0.625),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(179, 7, 242, 0.851), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
 #mypods-container > :first-child {
   height: 18vmin;
   width: 23vmin;
-  background-color: blueviolet;
+  background-color: rgba(28, 28, 28, 0.612);
   margin: 5px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+#podName,
+#playlistName {
+  width: 80%;
+}
+input {
+  border-radius: 10px;
+}
+#search {
+  margin-right: 5px;
 }
 </style>

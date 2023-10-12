@@ -1,6 +1,5 @@
 <template>
   <div class="mt-3" id="search-box">
-    <label for="search">Search:</label>
     <input
       type="text"
       name="search"
@@ -15,6 +14,7 @@
       v-for="track in searchResults"
       :trackData="track"
       :handleAddToSuggestions="handleAddToSuggestions"
+      :disableButtons="disableButtons"
     />
   </div>
 </template>
@@ -25,7 +25,7 @@ const ROOT_URL = "http://localhost:4000";
 export default {
   name: "Search",
   components: { TrackCard },
-  props: ["handleAddToSuggestions"],
+  props: ["handleAddToSuggestions", "disableButtons"],
   data() {
     return {
       searchItem: "",
@@ -51,5 +51,9 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+}
+input {
+  border-radius: 10px;
+  margin-right: 5px;
 }
 </style>

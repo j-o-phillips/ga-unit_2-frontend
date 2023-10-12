@@ -2,15 +2,19 @@
   <div class="container" id="custom-container">
     <div id="playlists">
       <button
+        id="tester"
         class="playlist-card"
-        v-for="track in playlists"
-        @click="handleSelectPlaylist(track)"
+        v-for="playlist in playlists"
+        @click="handleSelectPlaylist(playlist)"
       >
-        {{ track.name }}
+        {{ playlist.name }}
       </button>
     </div>
     <div id="search">
-      <Search :handleAddToSuggestions="handleAddToPersonalPlaylist" />
+      <Search
+        :handleAddToSuggestions="handleAddToPersonalPlaylist"
+        :disableButtons="disableButtons"
+      />
     </div>
     <div id="content">
       <h3>{{ currentPlaylistName }}</h3>
@@ -18,7 +22,9 @@
         v-for="track in content"
         :trackData="track"
         :currentPlaylistId="currentPlaylistId"
-        :handleDeleteFrontendOnly="handleDeleteFrontendOnly"
+        :disableButtons="disableButtons"
+        :handleSelectPlaylist="handleSelectPlaylist"
+        :currentPlaylistData="currentPlaylistData"
       />
     </div>
   </div>
@@ -38,6 +44,8 @@ export default {
       content: [],
       currentPlaylistId: "",
       currentPlaylistName: "",
+      currentPlaylistData: "",
+      disableButtons: false,
     };
   },
   mounted() {
@@ -50,6 +58,7 @@ export default {
   },
   methods: {
     handleAddToPersonalPlaylist(track) {
+      this.disableButtons = true;
       //format
       const dataObj = {
         track,
@@ -65,11 +74,17 @@ export default {
         body: JSON.stringify(track),
       })
         .then((res) => res.json())
-        .then((res) => console.log(res.message));
+        .then((res) => {
+          console.log(res.message);
+          this.handleSelectPlaylist(this.currentPlaylistData);
+          this.disableButtons = false;
+        });
     },
     handleSelectPlaylist(data) {
       this.currentPlaylistId = data.id;
       this.currentPlaylistName = data.name;
+      this.currentPlaylistData = data;
+
       fetch(`${ROOT_URL}/my-playlists/${data.id}`, {
         method: "GET",
         credentials: "include",
@@ -77,18 +92,10 @@ export default {
         .then((res) => res.json())
         .then((res) => (this.content = res.tracks.items));
     },
-    handleDeleteFrontendOnly(id) {
-      console.log(id);
-      //delete from frontend
-      const index = this.content.findIndex((track) => {
-        return track.id === id;
-      });
-      this.content.splice(index, 1);
-    },
   },
 };
 </script>
-<style>
+<style scoped>
 #custom-container {
   height: 90vh;
   width: 100vw;
@@ -97,6 +104,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 2fr;
   gap: 5px;
+  color: white;
 }
 #playlists {
   grid-column: 1/4;
@@ -115,14 +123,18 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.playlist-card {
+button {
   height: 100px;
   width: 100px;
   margin: 2px;
   overflow: hidden;
+  background: rgba(28, 28, 28, 0.624);
 }
 #custom-container > div {
   background-color: rgb(57, 56, 56);
   border-radius: 20px;
+}
+#tester {
+  background-color: rgba(28, 28, 28, 0.624);
 }
 </style>

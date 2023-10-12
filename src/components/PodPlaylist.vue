@@ -5,6 +5,7 @@
       :trackData="track"
       :handleDeleteFromPlaylist="handleDeleteFromPlaylist"
       :podAdmins="podAdmins"
+      :disableButtons="disableButtons"
     ></PlaylistCard>
   </div>
 </template>
@@ -14,7 +15,12 @@ import PlaylistCard from "./PlaylistCard.vue";
 
 export default {
   name: "PodPlaylist",
-  props: ["playlistData", "handleDeleteFromPlaylist", "podAdmins"],
+  props: [
+    "playlistData",
+    "handleDeleteFromPlaylist",
+    "podAdmins",
+    "disableButtons",
+  ],
   components: { PlaylistCard },
 };
 </script>

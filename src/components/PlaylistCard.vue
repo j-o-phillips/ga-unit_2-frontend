@@ -6,7 +6,11 @@
         {{ truncateString(trackData.artist) }}
       </p>
 
-      <button v-if="isAdmin()" @click="handleDeleteFromPlaylist(trackData)">
+      <button
+        :disabled="disableButtons"
+        v-if="isAdmin()"
+        @click="handleDeleteFromPlaylist(trackData)"
+      >
         X
       </button>
     </div>
@@ -26,7 +30,12 @@ if (userCred) {
 }
 export default {
   name: "PlaylistCard",
-  props: ["trackData", "handleDeleteFromPlaylist", "podAdmins"],
+  props: [
+    "trackData",
+    "handleDeleteFromPlaylist",
+    "podAdmins",
+    "disableButtons",
+  ],
   methods: {
     isAdmin() {
       return !!this.podAdmins.find((user) => userId === user);
@@ -48,9 +57,9 @@ p {
 #track-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  background-color: rgba(28, 28, 28, 0.624);
   border-radius: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   width: 90%;
   overflow: hidden;
 }
