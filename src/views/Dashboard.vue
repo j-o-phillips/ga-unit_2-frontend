@@ -3,8 +3,10 @@
     class="container d-flex justify-content-center align-items-center"
     id="container"
   >
-    <router-link class="window" to="/my-playlists">My Playlists</router-link>
-    <router-link class="window" to="/my-pods">Pods</router-link>
+    <router-link class="window" to="/my-playlists"
+      ><span>My Playlists</span></router-link
+    >
+    <router-link class="window" to="/my-pods"><span>Pods</span></router-link>
   </div>
 </template>
 
@@ -126,7 +128,11 @@ export default {
     ),
     linear-gradient(127deg, rgba(179, 7, 242, 0.851), rgba(0, 255, 0, 0) 70.71%),
     linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
-  color: white;
+  color: rgba(110, 108, 108, 0.681);
+  font-family: Bagel Fat One;
+  text-decoration: none;
+  font-size: 6em;
+  overflow: hidden;
 }
 .window:hover {
   background: linear-gradient(
@@ -136,5 +142,8 @@ export default {
     ),
     linear-gradient(127deg, rgb(179, 7, 242), rgba(0, 255, 0, 0) 70.71%),
     linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+span {
+  transform: rotate(45deg);
 }
 </style>

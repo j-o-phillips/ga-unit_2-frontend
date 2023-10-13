@@ -10,12 +10,12 @@
       <h3>{{ playlistName }}</h3>
       <div class="dropdown">
         <button
-          class="btn btn-secondary dropdown-toggle"
+          class="btn btn-secondary"
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          Menu
+          <font-awesome-icon :icon="['fas', 'bars']" style="color: #ffffff" />
         </button>
         <ul class="dropdown-menu">
           <li><button @click="handleLeavePod">Leave pod</button></li>
@@ -46,7 +46,7 @@
 
     <div class="item" id="friend-container">
       <div class="friend-card admin" v-for="friend in podAdmins">
-        {{ friend }}
+        <div>{{ friend }}</div>
       </div>
       <div class="friend-card" v-for="friend in podUsers">{{ friend }}</div>
     </div>
@@ -57,6 +57,9 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+library.add(faBars);
 const ROOT_URL = "http://localhost:4000";
 
 import Search from "@/components/Search.vue";
@@ -85,34 +88,31 @@ export default {
     };
   },
   mounted() {
-    if (userCred) {
-      const cookieData = JSON.parse(userCred);
-      console.log(cookieData.images[0].url);
+    const cookieData = JSON.parse(userCred);
+    console.log(cookieData.images[0].url);
 
-      fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
-        .then((res) => res.json())
-        .then((res) => {
-          this.podAdmins = res[0].admins;
-          this.podUsers = res[0].users;
-          this.currentPodId = res[0]._id;
-          this.playlistName = res[0].playlists[0].name;
-          if (res[0].playlists[0].tracks) {
-            this.playlistData = res[0].playlists[0].tracks;
-          }
-          if (res[0].playlists[0].suggestions) {
-            this.suggestionsData = res[0].playlists[0].suggestions;
-            console.log(this.suggestionsData);
-          }
-          if (res[0].playlists[0].spotifyId) {
-            this.playlistId = res[0].playlists[0].spotifyId;
-          }
-        });
-    }
+    fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
+      .then((res) => res.json())
+      .then((res) => {
+        this.podAdmins = res[0].admins;
+        this.podUsers = res[0].users;
+        this.currentPodId = res[0]._id;
+        this.playlistName = res[0].playlists[0].name;
+        if (res[0].playlists[0].tracks) {
+          this.playlistData = res[0].playlists[0].tracks;
+        }
+        if (res[0].playlists[0].suggestions) {
+          this.suggestionsData = res[0].playlists[0].suggestions;
+          console.log(this.suggestionsData);
+        }
+        if (res[0].playlists[0].spotifyId) {
+          this.playlistId = res[0].playlists[0].spotifyId;
+        }
+      });
   },
   methods: {
     async handleAddToSuggestions(data) {
       if (userCred) {
-        this.disableButtons = true;
         const trackDetails = {
           id: data.id,
           name: data.name,
@@ -121,23 +121,30 @@ export default {
           uri: data.uri,
           likes: [],
         };
-        this.suggestionsData.push(trackDetails);
-        await fetch(
-          `${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`,
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(trackDetails),
-          }
-        )
-          .then((res) => res.json())
-          .then((res) => {
-            console.log(res.message);
-            this.disableButtons = false;
-          });
+        //check if track already exists
+        const foundDuplicate = this.suggestionsData.find((suggestion) => {
+          return suggestion.id === trackDetails.id;
+        });
+        if (!foundDuplicate) {
+          this.disableButtons = true;
+          this.suggestionsData.push(trackDetails);
+          await fetch(
+            `${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`,
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(trackDetails),
+            }
+          )
+            .then((res) => res.json())
+            .then((res) => {
+              console.log(res.message);
+              this.disableButtons = false;
+            });
+        }
       }
     },
 
@@ -170,22 +177,30 @@ export default {
 
     async handleAddToPlaylist(data) {
       if (userCred) {
-        this.disableButtons = true;
-        this.playlistData.push(data);
+        const foundDuplicate = this.playlistData.find((track) => {
+          return track.id === data.id;
+        });
+        if (!foundDuplicate) {
+          this.disableButtons = true;
+          this.playlistData.push(data);
 
-        await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            console.log(res.message);
-            this.disableButtons = false;
-          });
+          await fetch(
+            `${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`,
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            }
+          )
+            .then((res) => res.json())
+            .then((res) => {
+              console.log(res.message);
+              this.disableButtons = false;
+            });
+        }
       }
     },
 

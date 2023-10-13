@@ -11,7 +11,7 @@
         v-if="isAdmin()"
         @click="handleDeleteFromPlaylist(trackData)"
       >
-        X
+        x
       </button>
     </div>
     <div>

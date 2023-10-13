@@ -2,8 +2,8 @@
   <div id="track-container">
     <div id="first-row">
       <p>
-        {{ truncateString(trackData.name) }} ||
-        {{ truncateString(trackData.artist) }}
+        {{ truncateString(trackData.name, 15) }} ||
+        {{ truncateString(trackData.artist, 15) }}
       </p>
       <ul class="list-group list-group-horizontal">
         <button
@@ -18,21 +18,29 @@
           v-if="isAdmin()"
           @click="handleDeleteFromSuggestions(trackData)"
         >
-          X
+          x
         </button>
         <button
           v-if="!isAdmin() && likeButtonVisible"
           :disabled="disableButtons || disableFomLocal"
           @click="handleLike(trackData.id)"
         >
-          L
+          <font-awesome-icon
+            :icon="['fas', 'thumbs-up']"
+            flip="horizontal"
+            style="color: #ffffff"
+          />
         </button>
         <button
           v-if="!isAdmin() && dislikeButtonVisible"
           :disabled="disableButtons || disableFomLocal"
           @click="handleDislike(trackData.id)"
         >
-          D
+          <font-awesome-icon
+            :icon="['fas', 'thumbs-down']"
+            flip="horizontal"
+            style="color: #ffffff"
+          />
         </button>
         <button id="likes-display" :disabled="true">
           {{ likes }}
@@ -40,12 +48,19 @@
       </ul>
     </div>
     <div>
-      <p>{{ trackData.album }}</p>
+      <p>{{ truncateString(trackData.album, 40) }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faThumbsUp,
+  faThumbsDown,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faThumbsUp, faThumbsDown, faBars);
 import Cookies from "js-cookie";
 const ROOT_URL = "http://localhost:4000";
 
@@ -86,9 +101,9 @@ export default {
     isAdmin() {
       return !!this.podAdmins.find((user) => userId === user);
     },
-    truncateString(str) {
-      if (str.length > 15) {
-        return str.slice(0, 15) + "...";
+    truncateString(str, maxLength) {
+      if (str.length > maxLength) {
+        return str.slice(0, maxLength) + "...";
       }
       return str;
     },

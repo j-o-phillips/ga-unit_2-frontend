@@ -81,21 +81,19 @@ export default {
     };
   },
   mounted() {
-    if (userCred) {
-      try {
-        fetch(`${ROOT_URL}/my-pods`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => (this.podList = res))
-          .then((res = console.log(res)));
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      fetch(`${ROOT_URL}/my-pods`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => (this.podList = res))
+        .then((res = console.log(res)));
+    } catch (error) {
+      console.log(error);
     }
   },
   methods: {
@@ -156,6 +154,9 @@ export default {
 .row {
   height: 100%;
 }
+h3 {
+  margin-top: 5px;
+}
 .window {
   height: 100%;
   background-color: rgb(65, 65, 65);
@@ -173,13 +174,14 @@ export default {
   background-color: rgba(28, 28, 28, 0.612);
   color: white;
   text-decoration: none;
-  font-size: 1.5em;
+  font-size: 2em;
   margin: 5px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: Bagel Fat One;
 }
 .pod-card:hover {
   background: linear-gradient(
@@ -190,6 +192,7 @@ export default {
     linear-gradient(127deg, rgba(179, 7, 242, 0.851), rgba(0, 255, 0, 0) 70.71%),
     linear-gradient(336deg, rgba(13, 13, 243, 0.8), rgba(0, 0, 255, 0) 70.71%);
 }
+
 #mypods-container > :first-child {
   height: 18vmin;
   width: 23vmin;
