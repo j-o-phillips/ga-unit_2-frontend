@@ -45,7 +45,10 @@
     </div>
 
     <div class="item" id="friend-container">
-      <div class="friend-card" v-for="friend in podMembers">{{ friend }}</div>
+      <div class="friend-card admin" v-for="friend in podAdmins">
+        {{ friend }}
+      </div>
+      <div class="friend-card" v-for="friend in podUsers">{{ friend }}</div>
     </div>
     <div class="item" id="post-container">
       <Posts :key="postsKey" :updatePosts="updatePosts" />
@@ -62,7 +65,6 @@ import PodPlaylist from "@/components/PodPlaylist.vue";
 import Posts from "@/components/Posts.vue";
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
-//json image first
 
 export default {
   name: "SpecificPod",
@@ -74,23 +76,24 @@ export default {
       suggestionsData: [],
       playlistData: [],
       test: [],
-      podMembers: [],
       podAdmins: [],
       podUsers: [],
       currentPodId: "",
       disableButtons: false,
       postsKey: 0,
+      currentUserImage: "",
     };
   },
   mounted() {
     if (userCred) {
+      const cookieData = JSON.parse(userCred);
+      console.log(cookieData.images[0].url);
+
       fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
         .then((res) => res.json())
         .then((res) => {
           this.podAdmins = res[0].admins;
           this.podUsers = res[0].users;
-          this.podMembers = res[0].admins.concat(res[0].users);
-
           this.currentPodId = res[0]._id;
           this.playlistName = res[0].playlists[0].name;
           if (res[0].playlists[0].tracks) {
@@ -116,6 +119,7 @@ export default {
           artist: data.artists[0].name,
           album: data.album.name,
           uri: data.uri,
+          likes: [],
         };
         this.suggestionsData.push(trackDetails);
         await fetch(
@@ -314,11 +318,15 @@ export default {
   background-color: rgba(28, 28, 28, 0.624);
   border-radius: 10px;
   height: 6vmin;
-  width: 10vmin;
+  width: 12vmin;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   margin: 5px;
+}
+.admin {
+  font-weight: bold;
+  text-decoration: underline;
 }
 .dropdown {
   position: absolute;

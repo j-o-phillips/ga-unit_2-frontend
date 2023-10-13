@@ -91,7 +91,8 @@ export default {
           },
         })
           .then((res) => res.json())
-          .then((res) => (this.podList = res));
+          .then((res) => (this.podList = res))
+          .then((res = console.log(res)));
       } catch (error) {
         console.log(error);
       }
@@ -150,6 +151,7 @@ export default {
 #container {
   height: 80vh;
   margin-top: 4vmin;
+  color: white;
 }
 .row {
   height: 100%;
