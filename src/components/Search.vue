@@ -21,7 +21,7 @@
 
 <script>
 import TrackCard from "./TrackCard.vue";
-const ROOT_URL = "http://localhost:4000";
+const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 export default {
   name: "Search",
   components: { TrackCard },

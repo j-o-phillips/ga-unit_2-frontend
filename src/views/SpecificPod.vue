@@ -60,7 +60,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 library.add(faBars);
-const ROOT_URL = "http://localhost:4000";
+const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 import Search from "@/components/Search.vue";
 import SuggestionsPlaylist from "@/components/SuggestionsPlaylist.vue";

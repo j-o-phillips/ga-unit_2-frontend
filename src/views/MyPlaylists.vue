@@ -31,7 +31,7 @@
 </template>
 
 <script>
-const ROOT_URL = "http://localhost:4000";
+const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 import Search from "@/components/Search.vue";
 import MyPlaylistCard from "@/components/MyPlaylistCard.vue";
 

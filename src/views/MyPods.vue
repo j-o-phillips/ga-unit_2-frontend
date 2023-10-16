@@ -69,7 +69,7 @@
 <script>
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
-const ROOT_URL = "http://localhost:4000";
+const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 export default {
   name: "MyPods",

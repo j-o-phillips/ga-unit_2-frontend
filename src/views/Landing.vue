@@ -8,7 +8,7 @@
 </template>
 
 <script>
-const ROOT_URL = "http://localhost:4000";
+const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 const clientId = "2420c054672e481b9ecd1cee4a3ff324";
 const clientSecret = "1f0e69d316cc431e9e9aacb89efbf903";

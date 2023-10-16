@@ -62,7 +62,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faThumbsUp, faThumbsDown, faBars);
 import Cookies from "js-cookie";
-const ROOT_URL = "http://localhost:4000";
+const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 let userId;
 const userCred = Cookies.get("userCred");
