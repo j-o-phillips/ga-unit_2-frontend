@@ -9,7 +9,7 @@
 
 <script>
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
-const redirectUri = process.env.VUE_APP_REDIRECT_URI;
+const redirectUri = "https://pods-ga.netlify.app";
 const clientId = process.env.VUE_APP_CLIENT_ID;
 const clientSecret = process.env.VUE_APP_CLIENT_SECRET;
 export default {
