@@ -43,7 +43,6 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (res.status === 200) {
-            console.log("track deleted");
             this.handleSelectPlaylist(this.currentPlaylistData);
           } else if (res.status === 403) {
             console.log("you don't own this playlist");

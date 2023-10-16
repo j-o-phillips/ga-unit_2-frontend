@@ -75,7 +75,6 @@ export default {
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log(res.message);
           this.handleSelectPlaylist(this.currentPlaylistData);
           this.disableButtons = false;
         });

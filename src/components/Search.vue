@@ -34,7 +34,6 @@ export default {
   },
   methods: {
     handleSearch() {
-      console.log("search");
       fetch(`${ROOT_URL}/search/${this.searchItem}`, {
         method: "GET",
         credentials: "include",

@@ -19,8 +19,11 @@
             :to="'/my-pods/' + pod.name"
             v-for="pod in searchResults"
           >
-            <div>{{ pod.name }}</div>
+            <div>
+              <span>{{ pod.name }}</span>
+            </div>
             <button
+              id="join"
               v-if="!isPodInMyPods(pod.name)"
               @click="handleJoinPod(pod._id)"
             >
@@ -55,7 +58,7 @@
             class="pod-card"
             :to="'/my-pods/' + pod.name"
             v-for="pod in podList"
-            >{{ pod.name }}</router-link
+            ><span>{{ pod.name }}</span></router-link
           >
         </div>
       </div>
@@ -90,8 +93,7 @@ export default {
         },
       })
         .then((res) => res.json())
-        .then((res) => (this.podList = res))
-        .then((res = console.log(res)));
+        .then((res) => (this.podList = res));
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +101,6 @@ export default {
   methods: {
     handlePodSearch() {
       if (userCred) {
-        console.log("search");
         fetch(`${ROOT_URL}/my-pods/${this.searchItem}`)
           .then((res) => res.json())
           .then((res) => (this.searchResults = res));
@@ -128,7 +129,6 @@ export default {
       }
     },
     handleJoinPod(id) {
-      console.log(id);
       fetch(`${ROOT_URL}/join/${id}`, {
         method: "POST",
         credentials: "include",
@@ -174,14 +174,13 @@ h3 {
   background-color: rgba(28, 28, 28, 0.612);
   color: white;
   text-decoration: none;
-  font-size: 2em;
+
   margin: 5px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: Bagel Fat One;
 }
 .pod-card:hover {
   background: linear-gradient(
@@ -213,5 +212,9 @@ input {
 }
 #search {
   margin-right: 5px;
+}
+span {
+  font-family: Bagel Fat One;
+  font-size: 2em;
 }
 </style>

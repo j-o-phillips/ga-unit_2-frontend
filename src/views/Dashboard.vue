@@ -58,7 +58,6 @@ export default {
           return response.json();
         })
         .then((data) => {
-          console.log("set");
           localStorage.setItem("access_token", data.access_token);
           this.getProfile();
         })
@@ -75,7 +74,7 @@ export default {
   methods: {
     async getProfile() {
       let accessToken = localStorage.getItem("access_token");
-      console.log(accessToken);
+
       const response = await fetch("https://api.spotify.com/v1/me", {
         headers: {
           Authorization: "Bearer " + accessToken,
@@ -94,8 +93,6 @@ export default {
       this.updateUserDB(data.id);
     },
     async updateUserDB(userId) {
-      console.log(userId);
-
       fetch(`${ROOT_URL}/login`, {
         method: "POST",
         credentials: "include",

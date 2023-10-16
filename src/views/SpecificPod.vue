@@ -89,7 +89,6 @@ export default {
   },
   mounted() {
     const cookieData = JSON.parse(userCred);
-    console.log(cookieData.images[0].url);
 
     fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
       .then((res) => res.json())
@@ -103,7 +102,6 @@ export default {
         }
         if (res[0].playlists[0].suggestions) {
           this.suggestionsData = res[0].playlists[0].suggestions;
-          console.log(this.suggestionsData);
         }
         if (res[0].playlists[0].spotifyId) {
           this.playlistId = res[0].playlists[0].spotifyId;
@@ -141,7 +139,6 @@ export default {
           )
             .then((res) => res.json())
             .then((res) => {
-              console.log(res.message);
               this.disableButtons = false;
             });
         }
@@ -169,7 +166,6 @@ export default {
         )
           .then((res) => res.json())
           .then((res) => {
-            console.log(res.message);
             this.disableButtons = false;
           });
       }
@@ -197,7 +193,6 @@ export default {
           )
             .then((res) => res.json())
             .then((res) => {
-              console.log(res.message);
               this.disableButtons = false;
             });
         }
@@ -221,7 +216,6 @@ export default {
         })
           .then((res) => res.json())
           .then((res) => {
-            console.log(res.message);
             this.disableButtons = false;
           });
       }
@@ -246,11 +240,9 @@ export default {
           .then((res) => res.json())
           .then((res) => {
             if (res.newId) {
-              console.log(res.newId);
               this.playlistId = res.newId;
             }
-          })
-          .then(() => console.log(this.playlistId));
+          });
       }
     },
 
@@ -261,7 +253,7 @@ export default {
         body: JSON.stringify({ podId: this.currentPodId }),
       })
         .then((res) => res.json())
-        .then((res) => console.log(res.message))
+
         .then(() => this.$router.push("/my-pods"));
     },
 
@@ -269,7 +261,6 @@ export default {
       console.log("delete");
     },
     updatePosts() {
-      console.log("update posts");
       this.postsKey += 1;
     },
   },
