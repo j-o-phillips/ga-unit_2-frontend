@@ -15,7 +15,7 @@ import Navbar from "@/components/Navbar.vue";
 import Cookies from "js-cookie";
 
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
-const redirectUri = "https://pods-ga.netlify.app";
+const redirectUri = process.env.VUE_APP_REDIRECT_URI;
 const clientId = process.env.VUE_APP_CLIENT_ID;
 const clientSecret = process.env.VUE_APP_CLIENT_SECRET;
 
