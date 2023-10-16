@@ -9,9 +9,9 @@
 
 <script>
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
-
-const clientId = "2420c054672e481b9ecd1cee4a3ff324";
-const clientSecret = "1f0e69d316cc431e9e9aacb89efbf903";
+const redirectUri = process.env.VUE_APP_REDIRECT_URI;
+const clientId = process.env.VUE_APP_CLIENT_ID;
+const clientSecret = process.env.VUE_APP_CLIENT_SECRET;
 export default {
   name: "Landing",
   mounted() {
@@ -56,8 +56,6 @@ export default {
       return base64encode(digest);
     },
     async handleLogin() {
-      const redirectUri = "http://localhost:8080/home";
-
       let codeVerifier = this.generateRandomString(128);
 
       this.generateCodeChallenge(codeVerifier).then((codeChallenge) => {
