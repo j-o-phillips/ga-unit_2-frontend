@@ -67,11 +67,6 @@ const cookieJson = JSON.parse(userCred);
 const userId = cookieJson.userId;
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
-if (userCred) {
-  const cookieData = JSON.parse(userCred);
-  userId = cookieData.userId;
-}
-
 export default {
   name: "SuggestionsCard",
   props: [
