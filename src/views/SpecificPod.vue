@@ -101,10 +101,10 @@ export default {
           this.playlistData = res.playlists[0].tracks;
         }
         if (res.playlists[0].suggestions) {
-          this.suggestionsData = res[0].playlists[0].suggestions;
+          this.suggestionsData = res.playlists[0].suggestions;
         }
         if (res.playlists[0].spotifyId) {
-          this.playlistId = res[0].playlists[0].spotifyId;
+          this.playlistId = res.playlists[0].spotifyId;
         }
       });
   },
