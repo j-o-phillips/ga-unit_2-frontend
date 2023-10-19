@@ -114,10 +114,10 @@ export default {
           const podData = {
             podName: this.podName,
             playlistName: this.playlistName,
+            userId: userId,
           };
           fetch(`${ROOT_URL}/my-pods`, {
             method: "POST",
-            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
