@@ -57,6 +57,7 @@ export default {
     fetch(`${ROOT_URL}/get-playlists/${accessToken}`, {
       method: "GET",
     })
+      .then((res) => console.log(res))
       .then((res) => res.json())
       .then((res) => (this.playlists = res));
   },
