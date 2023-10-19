@@ -63,8 +63,14 @@ import {
 library.add(faThumbsUp, faThumbsDown, faBars);
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
-const cookieJson = JSON.parse(userCred);
-const userId = cookieJson.userId;
+let userId;
+let accessToken;
+if (userCred) {
+  const cookieJson = JSON.parse(userCred);
+  userId = cookieJson.userId;
+  accessToken = cookieJson.accessToken;
+}
+
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 export default {
