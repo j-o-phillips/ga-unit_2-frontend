@@ -67,6 +67,7 @@
 </template>
 
 <script>
+//parse cookie
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
 const cookieJson = JSON.parse(userCred);
