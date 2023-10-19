@@ -251,8 +251,8 @@ export default {
     handleLeavePod() {
       fetch(`${ROOT_URL}/leave/${this.currentPodId}`, {
         method: "DELETE",
-        credentials: "include",
-        body: JSON.stringify({ podId: this.currentPodId }),
+
+        body: JSON.stringify({ podId: this.currentPodId, userId: userId }),
       })
         .then((res) => res.json())
 

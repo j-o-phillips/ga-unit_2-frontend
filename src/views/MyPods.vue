@@ -136,8 +136,8 @@ export default {
     handleJoinPod(id) {
       fetch(`${ROOT_URL}/join/${id}`, {
         method: "POST",
-        credentials: "include",
-        body: JSON.stringify({ podId: id }),
+
+        body: JSON.stringify({ podId: id, userId: userId }),
       })
         .then((res) => res.json())
         .then(() => {
