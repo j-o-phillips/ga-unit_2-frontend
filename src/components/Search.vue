@@ -20,8 +20,11 @@
 </template>
 
 <script>
+const cookieJson = JSON.parse(userCred);
+const accessToken = cookieJson.accessToken;
 import TrackCard from "./TrackCard.vue";
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
+
 export default {
   name: "Search",
   components: { TrackCard },
@@ -34,9 +37,8 @@ export default {
   },
   methods: {
     handleSearch() {
-      fetch(`${ROOT_URL}/search/${this.searchItem}`, {
+      fetch(`${ROOT_URL}/search/${this.searchItem}/${accessToken}`, {
         method: "GET",
-        credentials: "include",
       })
         .then((response) => response.json())
         .then((result) => (this.searchResults = result));
