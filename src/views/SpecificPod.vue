@@ -129,7 +129,6 @@ export default {
             `${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`,
             {
               method: "POST",
-              credentials: "include",
               headers: {
                 "Content-Type": "application/json",
               },
@@ -156,7 +155,6 @@ export default {
           `${ROOT_URL}/my-pods/suggestions/${this.$route.params.pod}`,
           {
             method: "DELETE",
-            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
