@@ -92,6 +92,7 @@ export default {
     fetch(`${ROOT_URL}/pod/my-pods/${this.$route.params.pod}`)
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         this.podAdmins = res[0].admins;
         this.podUsers = res[0].users;
         this.currentPodId = res[0]._id;
