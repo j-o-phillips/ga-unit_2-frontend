@@ -90,6 +90,7 @@ export default {
         accessToken: accessToken,
       });
       Cookies.set("userCred", cookieData);
+      console.log(cookieData);
       this.updateUserDB(data.id, data.images);
     },
     async updateUserDB(userId, images) {
