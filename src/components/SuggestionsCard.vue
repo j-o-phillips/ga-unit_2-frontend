@@ -62,10 +62,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faThumbsUp, faThumbsDown, faBars);
 import Cookies from "js-cookie";
+const userCred = Cookies.get("userCred");
+const cookieJson = JSON.parse(userCred);
+const userId = cookieJson.userId;
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
-let userId;
-const userCred = Cookies.get("userCred");
 if (userCred) {
   const cookieData = JSON.parse(userCred);
   userId = cookieData.userId;
@@ -108,6 +109,10 @@ export default {
       return str;
     },
     handleLike(trackId) {
+      const data = {
+        trackId,
+        userId,
+      };
       this.disableFomLocal = true;
       this.likes += 1;
       this.likeButtonVisible = false;
@@ -118,7 +123,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ trackId }),
+        body: JSON.stringify(data),
       })
         .then((res) => res.json())
         .then(() => (this.disableFomLocal = false));
