@@ -11,10 +11,10 @@
       </button>
     </div>
     <div id="search">
-      <Search
+      <!-- <Search
         :handleAddToSuggestions="handleAddToPersonalPlaylist"
         :disableButtons="disableButtons"
-      />
+      /> -->
     </div>
     <div id="content">
       <h3>{{ currentPlaylistName }}</h3>
