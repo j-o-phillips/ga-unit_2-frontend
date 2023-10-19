@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+const userCred = Cookies.get("userCred");
 const cookieJson = JSON.parse(userCred);
 const accessToken = cookieJson.accessToken;
 import TrackCard from "./TrackCard.vue";
