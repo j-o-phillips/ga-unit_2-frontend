@@ -33,8 +33,14 @@
 <script>
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
-const cookieJson = JSON.parse(userCred);
-const accessToken = cookieJson.accessToken;
+let userId;
+let accessToken;
+if (userCred) {
+  const cookieJson = JSON.parse(userCred);
+  userId = cookieJson.userId;
+  accessToken = cookieJson.accessToken;
+}
+
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 import Search from "@/components/Search.vue";
 import MyPlaylistCard from "@/components/MyPlaylistCard.vue";

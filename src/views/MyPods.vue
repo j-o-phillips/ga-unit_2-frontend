@@ -70,8 +70,11 @@
 //parse cookie
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
-const cookieJson = JSON.parse(userCred);
-const userId = cookieJson.userId;
+let userId;
+if (userCred) {
+  const cookieJson = JSON.parse(userCred);
+  userId = cookieJson.userId;
+}
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 export default {
