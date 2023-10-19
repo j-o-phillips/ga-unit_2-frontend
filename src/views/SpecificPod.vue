@@ -67,8 +67,15 @@ import SuggestionsPlaylist from "@/components/SuggestionsPlaylist.vue";
 import PodPlaylist from "@/components/PodPlaylist.vue";
 import Posts from "@/components/Posts.vue";
 import Cookies from "js-cookie";
+
 const userCred = Cookies.get("userCred");
-const cookieData = JSON.parse(userCred);
+let userId;
+let accessToken;
+if (userCred) {
+  const cookieJson = JSON.parse(userCred);
+  userId = cookieJson.userId;
+  accessToken = cookieJson.accessToken;
+}
 
 export default {
   name: "SpecificPod",
