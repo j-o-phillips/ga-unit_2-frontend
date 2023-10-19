@@ -93,17 +93,17 @@ export default {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        this.podAdmins = res[0].admins;
-        this.podUsers = res[0].users;
-        this.currentPodId = res[0]._id;
-        this.playlistName = res[0].playlists[0].name;
-        if (res[0].playlists[0].tracks) {
-          this.playlistData = res[0].playlists[0].tracks;
+        this.podAdmins = res.admins;
+        this.podUsers = res.users;
+        this.currentPodId = res._id;
+        this.playlistName = res.playlists[0].name;
+        if (res.playlists[0].tracks) {
+          this.playlistData = res.playlists[0].tracks;
         }
-        if (res[0].playlists[0].suggestions) {
+        if (res.playlists[0].suggestions) {
           this.suggestionsData = res[0].playlists[0].suggestions;
         }
-        if (res[0].playlists[0].spotifyId) {
+        if (res.playlists[0].spotifyId) {
           this.playlistId = res[0].playlists[0].spotifyId;
         }
       });
