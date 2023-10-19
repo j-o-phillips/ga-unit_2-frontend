@@ -181,7 +181,6 @@ export default {
             `${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`,
             {
               method: "POST",
-              credentials: "include",
               headers: {
                 "Content-Type": "application/json",
               },
@@ -205,7 +204,6 @@ export default {
         this.playlistData.splice(index, 1);
         await fetch(`${ROOT_URL}/my-pods/playlist/${this.$route.params.pod}`, {
           method: "DELETE",
-          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
