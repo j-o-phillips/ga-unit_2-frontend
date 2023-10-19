@@ -72,7 +72,6 @@ import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
 const cookieJson = JSON.parse(userCred);
 const userId = cookieJson.userId;
-console.log(userId);
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 export default {
@@ -104,7 +103,7 @@ export default {
   methods: {
     handlePodSearch() {
       if (userCred) {
-        fetch(`${ROOT_URL}/my-pods/${this.searchItem}`)
+        fetch(`${ROOT_URL}/search/my-pods/${this.searchItem}`)
           .then((res) => res.json())
           .then((res) => (this.searchResults = res));
       }
