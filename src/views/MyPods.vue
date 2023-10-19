@@ -69,6 +69,9 @@
 <script>
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
+const cookieJson = JSON.parse(req.cookies.userCred);
+const userId = cookieJson.userId;
+console.log(userId);
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 
 export default {
@@ -85,9 +88,8 @@ export default {
   },
   mounted() {
     try {
-      fetch(`${ROOT_URL}/my-pods`, {
+      fetch(`${ROOT_URL}/my-pods/${userId}`, {
         method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
