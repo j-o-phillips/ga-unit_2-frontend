@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     handleSearch() {
-      fetch(`${ROOT_URL}/search/${this.searchItem}/${accessToken}`, {
+      fetch(`${ROOT_URL}/searchSpotify/${this.searchItem}/${accessToken}`, {
         method: "GET",
       })
         .then((response) => response.json())
