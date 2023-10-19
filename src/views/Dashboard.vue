@@ -90,14 +90,14 @@ export default {
         accessToken: accessToken,
       });
       Cookies.set("userCred", cookieData);
-      this.updateUserDB(data.id);
+      this.updateUserDB(data.id, data.images);
     },
-    async updateUserDB(userId) {
+    async updateUserDB(userId, images) {
       fetch(`${ROOT_URL}/login`, {
         method: "POST",
-        credentials: "include",
         body: JSON.stringify({
           userId: userId,
+          images: images,
         }),
       });
     },
