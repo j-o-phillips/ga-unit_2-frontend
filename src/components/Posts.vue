@@ -10,6 +10,14 @@
 
 <script>
 import PostContainer from "./PostContainer.vue";
+import Cookies from "js-cookie";
+const userCred = Cookies.get("userCred");
+let userId;
+if (userCred) {
+  const cookieJson = JSON.parse(userCred);
+  userId = cookieJson.userId;
+}
+
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 export default {
   name: "PostBar",
@@ -34,10 +42,10 @@ export default {
     async handleSubmitPost() {
       const data = {
         content: this.postContent,
+        userId: userId,
       };
       await fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}/posts`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
