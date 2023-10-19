@@ -68,6 +68,7 @@ import PodPlaylist from "@/components/PodPlaylist.vue";
 import Posts from "@/components/Posts.vue";
 import Cookies from "js-cookie";
 const userCred = Cookies.get("userCred");
+const cookieData = JSON.parse(userCred);
 
 export default {
   name: "SpecificPod",
@@ -88,9 +89,7 @@ export default {
     };
   },
   mounted() {
-    const cookieData = JSON.parse(userCred);
-
-    fetch(`${ROOT_URL}/my-pods/${this.$route.params.pod}`)
+    fetch(`${ROOT_URL}/pod/my-pods/${this.$route.params.pod}`)
       .then((res) => res.json())
       .then((res) => {
         this.podAdmins = res[0].admins;
