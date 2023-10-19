@@ -31,6 +31,10 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+const userCred = Cookies.get("userCred");
+const cookieJson = JSON.parse(userCred);
+const accessToken = cookieJson.accessToken;
 const ROOT_URL = process.env.VUE_APP_BACKEND_URL;
 import Search from "@/components/Search.vue";
 import MyPlaylistCard from "@/components/MyPlaylistCard.vue";
@@ -49,9 +53,8 @@ export default {
     };
   },
   mounted() {
-    fetch(`${ROOT_URL}/my-playlists`, {
+    fetch(`${ROOT_URL}/get-playlists/${accessToken}`, {
       method: "GET",
-      credentials: "include",
     })
       .then((res) => res.json())
       .then((res) => (this.playlists = res));
