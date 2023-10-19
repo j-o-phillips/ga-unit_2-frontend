@@ -41,6 +41,7 @@ export default {
     handleSearch() {
       fetch(`${ROOT_URL}/searchSpotify/${this.searchItem}/${accessToken}`, {
         method: "GET",
+        mode: "no-cors",
       })
         .then((response) => response.json())
         .then((result) => (this.searchResults = result));
