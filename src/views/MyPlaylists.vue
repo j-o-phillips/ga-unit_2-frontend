@@ -53,6 +53,7 @@ export default {
     };
   },
   mounted() {
+    console.log(accessToken);
     fetch(`${ROOT_URL}/get-playlists/${accessToken}`, {
       method: "GET",
     })
