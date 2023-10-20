@@ -95,6 +95,9 @@ export default {
     async updateUserDB(userId, images) {
       fetch(`${ROOT_URL}/login`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           userId: userId,
           images: images,
