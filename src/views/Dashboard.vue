@@ -93,6 +93,7 @@ export default {
       this.updateUserDB(data.id, data.images);
     },
     async updateUserDB(userId, images) {
+      console.log(userId, images);
       fetch(`${ROOT_URL}/login`, {
         method: "POST",
         headers: {

@@ -6,7 +6,7 @@
   status = 200
 [[headers]]
   for = "/*"
-  [headers.values]
+[headers.values]
     Access-Control-Allow-Origin = "*"
 
 
