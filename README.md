@@ -146,7 +146,7 @@ The following were the General Assembly requirements for this project:
 ### Authentication
 
 For authentication I chose spotify’s authorization code PKCE flow. Spotify’s API docs are very clear and I was able to follow this process from the information available there. To outline the process, I generated a Code challenge which I used to request authorization from Spotify and receive a code. When the user is redirected back to my site’s dashboard page, upon the component mounting, the code is exchanged for an access token which I save to local storage to use in future api calls. In addition to this, when the user hits the dashboard page their spotify profile is received. I save this in a cookie which I can then use to protect the other routes on the frontend, and I use this data update the user model im my database. For a more thorough walk-through of the Spotify authorization PKCE flow follow this link:
-![Spotify Docs](https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow)
+[Spotify Docs](https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow)
 
 ### Pods
 
